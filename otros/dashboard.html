@@ -129,6 +129,11 @@ body { margin:0; padding:0; font-family: var(--font-main); line-height:1.42857; 
                 <input type="text" class="input-clean" placeholder="Apellidos">
             </div>
 
+            <div class="field-group">
+    <label>Nacionalidad</label>
+    <input type="text" class="input-clean" id="nacionalidadField" readonly>
+</div>
+
             <button type="button" class="btn-blue-action">Actualizar la cuenta</button>
         </form>
     </section>
@@ -227,6 +232,7 @@ onAuthStateChanged(auth, async (user) => {
             document.querySelector('input[readonly]').value = data.numero || "";
             document.querySelector('input[placeholder="Nombre"]').value = data.nombres || "";
             document.querySelector('input[placeholder="Apellidos"]').value = data.apellidos || "";
+            document.getElementById("nacionalidadField").value = data.tramite?.nacionalidad || "";
         }
     } else {
         window.location.href = "login.html";
@@ -236,3 +242,4 @@ onAuthStateChanged(auth, async (user) => {
 <script src="loader.js"></script>
 </body>
 </html>
+
