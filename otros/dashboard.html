@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Usuario - INM</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet" href="loader.css">
+<style>
+:root {
+    --gob-color: rgb(97, 18, 50);
+    --gob-dark: rgb(58, 11, 30);
+    --gob-blue: #00a6e3;
+    --font-main: "Noto Sans", "Open Sans", Helvetica, Arial, sans-serif;
+}
+
+body { margin:0; padding:0; font-family: var(--font-main); line-height:1.42857; color: rgb(64,64,65); font-weight:300; background-color:#f5f5f5; display:flex; flex-direction:column; min-height:100vh; }
+
+/* HEADER */
+.main-header { background-color: var(--gob-color); position: fixed; top:0; right:0; left:0; z-index:1030; min-height:72px; display:flex; align-items:center; }
+.header-container { max-width:1170px; margin:0 auto; width:100%; display:flex; justify-content:space-between; align-items:center; padding:0 15px; }
+.header-logo { height:45px; }
+.nav-top a { color:white; text-decoration:none; font-size:14px; margin-left:20px; font-weight:300; }
+
+/* CONTENEDOR PRINCIPAL */
+.content-wrapper { flex:1; padding-top:120px; padding-bottom:40px; display:flex; justify-content:center; align-items:flex-start; }
+.dashboard-card { background-color:#fff; display:flex; width:100%; max-width:880px; min-height:420px; box-shadow:0 1px 4px rgba(0,0,0,0.15); border-radius:4px; overflow:hidden; }
+
+/* Columna Izquierda (perfil) */
+.sidebar-profile { width:280px; background-color:#f4f4f4; border-right:1px solid #e3e3e3; padding:35px 20px; display:flex; flex-direction:column; align-items:center; }
+.avatar-circle { width:120px; height:120px; border-radius:50%; border:4px solid #fff; object-fit:cover; margin-bottom:18px; background-color:#ddd; }
+.user-fullname { font-size:13px; font-weight:700; text-align:center; color:#333; text-transform:uppercase; margin-bottom:4px; }
+.link-perfil { color: var(--gob-blue); text-decoration:none; font-size:12px; margin-bottom:25px; }
+.side-menu { width:100%; list-style:none; padding:0; margin:0; }
+.side-menu li { padding:12px 14px; background-color:#f4f4f4; border-top:1px solid #e3e3e3; font-size:13px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; color:#555; }
+.side-menu li.active { background-color:#fff; font-weight:600; color:#000; }
+
+/* Columna Derecha (formulario) */
+.main-form-area { flex:1; padding:35px 60px 40px 40px; }
+.section-header { display:flex; align-items:center; gap:10px; margin-bottom:25px; color:#444; }
+.section-header i { font-size:20px; color:#777; }
+.section-header h2 { font-size:18px; font-weight:400; margin:0; }
+.field-group { margin-bottom:20px; max-width:360px; }
+.field-group label { display:block; font-size:12px; font-weight:700; color:#444; margin-bottom:3px; }
+.input-clean { width:100%; border:none; border-bottom:1px solid #cfcfcf; padding:6px 0; font-size:14px; color:#666; background:transparent; font-family: var(--font-main); }
+.input-clean:focus { outline:none; border-bottom-color:var(--gob-blue); }
+.btn-blue-action { background-color:var(--gob-blue); color:white; border:none; padding:10px 26px; font-size:14px; cursor:pointer; margin-top:10px; }
+.btn-blue-action:hover { background-color:#008fcb; }
+
+/* FOOTER */
+.main-footer { background-color: rgb(97, 18, 50); color:white; padding:40px 0 20px 0; }
+.footer-container { max-width:1170px; margin:0 auto; padding:0 15px; display:flex; flex-wrap:wrap; }
+.footer-col { flex:1; min-width:200px; margin-bottom:20px; }
+.btn-aa { background: rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); color:white; padding:4px 8px; cursor:pointer; margin-bottom:5px; display:block; font-size:11px; }
+.footer-col h4 { font-size:18px; font-weight:400; margin:0 0 15px 0; }
+.footer-ul { list-style:none; padding:0; margin:0; font-size:13px; line-height:1.8; }
+.footer-ul a { color:white; text-decoration:none; }
+.social-icons { font-size:20px; display:flex; gap:12px; margin-top:10px; }
+.block-079 { margin-top:20px; display:flex; align-items:center; gap:10px; }
+
+@media (max-width:900px) {
+    .dashboard-card { flex-direction:column; max-width:95%; }
+    .sidebar-profile { width:100%; border-right:none; border-bottom:1px solid #e3e3e3; }
+    .main-form-area { padding:25px 20px 30px 20px; }
+}
+</style>
+</head>
+<body>
+
+
+<!-- LOADER GLOBAL -->
+<div class="custom-loader" id="customLoader">
+    <div class="loader-content">
+        <img src="gobiernomexico.png" class="loader-logo">
+    </div>
+</div>
+
+
+
+<header class="main-header">
+<div class="header-container">
+<img src="https://framework-gb.cdn.gob.mx/landing/img/logoheader.svg" alt="Gobierno de México" class="header-logo">
+<nav class="nav-top">
+<a href="#">Inicio</a>
+<a href="dashboard.html">Cuenta</a>
+<a href="tramite.html">Trámite INM</a>
+<a href="login.html">Salir</a>
+<a href="#"><i class="fa fa-search"></i></a>
+</nav>
+</div>
+</header>
+
+<main class="content-wrapper">
+<div class="dashboard-card">
+
+    <aside class="sidebar-profile">
+        <img src="logos/intermedio.png" alt="Usuario" class="avatar-circle">
+        <div class="user-fullname">Nombre Usuario</div>
+        <a href="#" class="link-perfil">Ver el perfil</a>
+
+        <ul class="side-menu">
+            <li class="active">
+                <span>Cuenta</span>
+                <i class="fa fa-chevron-right"></i>
+            </li>
+        </ul>
+    </aside>
+
+    <section class="main-form-area">
+        <div class="section-header">
+            <i class="fa fa-user-circle"></i>
+            <h2>Cuenta</h2>
+        </div>
+
+        <form>
+            <div class="field-group">
+                <label>Número de usuario</label>
+                <input type="text" class="input-clean" readonly>
+            </div>
+
+            <div class="field-group">
+                <label>Nombre</label>
+                <input type="text" class="input-clean" placeholder="Nombre">
+            </div>
+
+            <div class="field-group">
+                <label>Apellidos</label>
+                <input type="text" class="input-clean" placeholder="Apellidos">
+            </div>
+
+            <button type="button" class="btn-blue-action">Actualizar la cuenta</button>
+        </form>
+    </section>
+
+</div>
+</main>
+
+<footer class="main-footer">
+<div class="footer-container">
+
+<div class="footer-col">
+<div style="margin-bottom: 20px;">
+<button class="btn-aa">Aa+</button>
+<button class="btn-aa">Aa-</button>
+</div>
+<img src="https://framework-gb.cdn.gob.mx/gobmx/img/logo_blanco.svg" alt="logo" style="max-width:50%; margin-left:-27px; margin-top:12px;">
+</div>
+
+<div class="footer-col" style="min-width:200px;">
+<h4>Enlaces</h4>
+<ul class="footer-ul">
+<li><a href="#">Datos</a></li>
+<li><a href="#">Portal de Obligaciones de Transparencia</a></li>
+<li><a href="#">PNT</a></li>
+<li><a href="#">Transparencia para el Pueblo</a></li>
+<li><a href="#">Alerta</a></li>
+<li><a href="#">Denuncia</a></li>
+</ul>
+</div>
+
+<div class="footer-col">
+<h4>¿Qué es gob.mx?</h4>
+<p style="font-size:15px; margin-bottom:20px;">Es el portal único de trámites, información y participación ciudadana. <a href="#" style="color:white; text-decoration:underline;">Leer más</a></p>
+<ul class="footer-ul">
+<li><a href="#">Declaración de Accesibilidad</a></li>
+<li><a href="#">Términos y Condiciones</a></li>
+</ul>
+</div>
+
+<div class="footer-col">
+<p style="font-size:15px; margin-bottom:10px; text-decoration:underline;"><a href="#" style="color:white;">Denuncia contra servidores públicos</a></p>
+<h4>Contacto</h4>
+<p style="font-size:15px; margin:0;">Dudas e información a</p>
+<p style="font-size:15px; margin:0;"><a href="mailto:cam@inami.gob.mx" style="color:white; text-decoration:none;">cam@inami.gob.mx</a></p>
+
+<p style="font-size:18px; margin:20px 0 10px 0;">Síguenos en</p>
+<div class="social-icons">
+<i class="fab fa-facebook"></i>
+<i class="fab fa-x-twitter"></i>
+<i class="fab fa-instagram"></i>
+<i class="fab fa-youtube"></i>
+</div>
+
+<div class="block-079">
+<i class="fas fa-asterisk" style="font-size:35px;"></i>
+<div>
+<span style="display:block; font-size:32px; font-weight:700; line-height:1;">079</span>
+<span style="display:block; font-size:10px; text-transform:uppercase; font-weight:600;">Comunícate, estamos para ayudarte</span>
+</div>
+</div>
+</div>
+
+</div>
+</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBszJjppD1hdGWo2d1G-PZMr9hi6srDCFo",
+  authDomain: "inmx-9d529.firebaseapp.com",
+  databaseURL: "https://inmx-9d529-default-rtdb.firebaseio.com",
+  projectId: "inmx-9d529",
+  storageBucket: "inmx-9d529.firebasestorage.app",
+  messagingSenderId: "1010164771679",
+  appId: "1:1010164771679:web:d4bfd09770b1b10267e4ea"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+onAuthStateChanged(auth, async (user) => {
+    if(user){
+        const snapshot = await get(ref(db, "usuarios/" + user.uid));
+        if(snapshot.exists()){
+            const data = snapshot.val();
+
+            // Sidebar
+            document.querySelector(".user-fullname").textContent = `${data.nombres} ${data.apellidos}`;
+            document.querySelector(".avatar-circle").src = data.fotoPerfil || "ghost.jpg";
+
+            // Formulario
+            document.querySelector('input[readonly]').value = data.numero || "";
+            document.querySelector('input[placeholder="Nombre"]').value = data.nombres || "";
+            document.querySelector('input[placeholder="Apellidos"]').value = data.apellidos || "";
+        }
+    } else {
+        window.location.href = "login.html";
+    }
+});
+</script>
+<script src="loader.js"></script>
+</body>
+</html>

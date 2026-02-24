@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acceso - Instituto Nacional de Migración</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet" href="loader.css">
+<style>
+:root {
+    --gob-color: rgb(97, 18, 50);
+    --gob-dark: rgb(58, 11, 30);
+    --font-main: "Noto Sans", "Open Sans", Helvetica, Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-main);
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-header {
+    background-color: var(--gob-color);
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+    min-height: 72px;
+    display: flex;
+    align-items: center;
+}
+
+.header-container {
+    max-width: 1170px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.header-logo { height: 45px; }
+
+.nav-top a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    margin-left: 20px;
+}
+
+.login-main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 120px 15px 80px 15px;
+}
+
+.login-wrapper {
+    width: 100%;
+    max-width: 600px;
+}
+
+.login-form-box {
+    background-color: #ffffff;
+    padding: 35px 40px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.login-form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #c4c4c4;
+    font-size: 14px;
+}
+
+.login-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-primary {
+    background-color: #0099cc;
+    color: white;
+    border: none;
+    padding: 10px 26px;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #007ea6;
+}
+
+/* FOOTER DEL DASHBOARD */
+.main-footer { background-color: rgb(97, 18, 50); color:white; padding:40px 0 20px 0; }
+.footer-container { max-width:1170px; margin:0 auto; padding:0 15px; display:flex; flex-wrap:wrap; }
+.footer-col { flex:1; min-width:200px; margin-bottom:20px; }
+.btn-aa { background: rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); color:white; padding:4px 8px; cursor:pointer; margin-bottom:5px; display:block; font-size:11px; }
+.footer-col h4 { font-size:18px; font-weight:400; margin:0 0 15px 0; }
+.footer-ul { list-style:none; padding:0; margin:0; font-size:13px; line-height:1.8; }
+.footer-ul a { color:white; text-decoration:none; }
+.social-icons { font-size:20px; display:flex; gap:12px; margin-top:10px; }
+.block-079 { margin-top:20px; display:flex; align-items:center; gap:10px; }
+</style>
+</head>
+
+<body>
+
+
+<!-- LOADER GLOBAL -->
+<div class="custom-loader" id="customLoader">
+    <div class="loader-content">
+        <img src="gobiernomexico.png" class="loader-logo">
+    </div>
+</div>
+
+
+<header class="main-header">
+<div class="header-container">
+<img src="https://framework-gb.cdn.gob.mx/landing/img/logoheader.svg" class="header-logo">
+<nav class="nav-top">
+<a href="#">Trámites</a>
+<a href="#">Gobierno</a>
+<a href="#">English</a>
+</nav>
+</div>
+</header>
+
+<main class="login-main">
+<div class="login-wrapper">
+<div class="login-form-box">
+
+<form id="loginForm">
+
+<div class="login-form-row">
+<div class="form-group">
+<label>NUMERO DE PIEZA</label>
+<input type="text" id="user" class="form-control">
+</div>
+
+<div class="form-group">
+<label>CLAVE</label>
+<input type="password" id="pass" class="form-control">
+</div>
+</div>
+
+<div class="login-buttons">
+<button type="submit" class="btn-primary">Acceder</button>
+</div>
+
+</form>
+
+</div>
+</div>
+</main>
+
+<footer class="main-footer">
+<div class="footer-container">
+
+<div class="footer-col">
+<div style="margin-bottom: 20px;">
+<button class="btn-aa">Aa+</button>
+<button class="btn-aa">Aa-</button>
+</div>
+<img src="https://framework-gb.cdn.gob.mx/gobmx/img/logo_blanco.svg" alt="logo" style="max-width:50%; margin-left:-27px; margin-top:12px;">
+</div>
+
+<div class="footer-col" style="min-width:200px;">
+<h4>Enlaces</h4>
+<ul class="footer-ul">
+<li><a href="#">Datos</a></li>
+<li><a href="#">Portal de Obligaciones de Transparencia</a></li>
+<li><a href="#">PNT</a></li>
+<li><a href="#">Transparencia para el Pueblo</a></li>
+<li><a href="#">Alerta</a></li>
+<li><a href="#">Denuncia</a></li>
+</ul>
+</div>
+
+<div class="footer-col">
+<h4>¿Qué es gob.mx?</h4>
+<p style="font-size:15px; margin-bottom:20px;">Es el portal único de trámites, información y participación ciudadana. <a href="#" style="color:white; text-decoration:underline;">Leer más</a></p>
+<ul class="footer-ul">
+<li><a href="#">Declaración de Accesibilidad</a></li>
+<li><a href="#">Términos y Condiciones</a></li>
+</ul>
+</div>
+
+<div class="footer-col">
+<p style="font-size:15px; margin-bottom:10px; text-decoration:underline;"><a href="#" style="color:white;">Denuncia contra servidores públicos</a></p>
+<h4>Contacto</h4>
+<p style="font-size:15px; margin:0;">Dudas e información a</p>
+<p style="font-size:15px; margin:0;"><a href="mailto:cam@inami.gob.mx" style="color:white; text-decoration:none;">cam@inami.gob.mx</a></p>
+
+<p style="font-size:18px; margin:20px 0 10px 0;">Síguenos en</p>
+<div class="social-icons">
+<i class="fab fa-facebook"></i>
+<i class="fab fa-x-twitter"></i>
+<i class="fab fa-instagram"></i>
+<i class="fab fa-youtube"></i>
+</div>
+
+<div class="block-079">
+<i class="fas fa-asterisk" style="font-size:35px;"></i>
+<div>
+<span style="display:block; font-size:32px; font-weight:700; line-height:1;">079</span>
+<span style="display:block; font-size:10px; text-transform:uppercase; font-weight:600;">Comunícate, estamos para ayudarte</span>
+</div>
+</div>
+</div>
+
+</div>
+</footer>
+
+<!-- 🔥 FIREBASE LOGIN -->
+<script type="module">
+
+// 🔥 IMPORTS FIREBASE
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBszJjppD1hdGWo2d1G-PZMr9hi6srDCFo",
+  authDomain: "inmx-9d529.firebaseapp.com",
+  databaseURL: "https://inmx-9d529-default-rtdb.firebaseio.com",
+  projectId: "inmx-9d529",
+  storageBucket: "inmx-9d529.firebasestorage.app",
+  messagingSenderId: "1010164771679",
+  appId: "1:1010164771679:web:d4bfd09770b1b10267e4ea"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+// 🎯 LOGIN
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const numero = document.getElementById("user").value.trim();
+    const password = document.getElementById("pass").value.trim();
+
+    if(numero === "" || password === ""){
+        alert("Complete todos los campos");
+        return;
+    }
+
+    // Convertimos número en email falso
+    const email = numero + "@sistema.com";
+
+    try {
+
+        // 🔐 Login en Authentication
+        const cred = await signInWithEmailAndPassword(auth, email, password);
+        const user = cred.user;
+
+        // 🔎 Buscar datos en Realtime Database
+        const snapshot = await get(ref(db, "usuarios/" + user.uid));
+
+        if(snapshot.exists()){
+
+            const datos = snapshot.val();
+
+            if(datos.rol === "admin"){
+                window.location.href = "dashboard_admin.html";
+            }else{
+                window.location.href = "dashboard.html";
+            }
+
+        }else{
+            alert("Usuario sin datos asignados");
+        }
+
+    } catch(error){
+        alert("Número o clave incorrectos");
+        console.error(error);
+    }
+
+});
+
+</script>
+<script src="loader.js"></script>
+</body>
+</html>

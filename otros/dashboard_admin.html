@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Admin Mejorado</title>
+<style>
+body { font-family: Arial; padding:20px; background: #f5f5f5;}
+.container { max-width: 800px; margin: auto; background: #fff; padding:20px; box-shadow:0 0 5px rgba(0,0,0,0.2);}
+input { display:block; margin:5px 0; padding:5px; width:100%; }
+button { margin-top:10px; padding:8px; cursor:pointer; background:#0099cc; color:white; border:none; }
+button:hover { background:#007ea6; }
+table { margin-top:20px; border-collapse: collapse; width:100%; }
+th, td { border:1px solid #ccc; padding:8px; text-align:left; }
+#formulario { display:none; border:1px solid #ccc; padding:15px; margin-top:20px; background:#f9f9f9;}
+#statusMsg { margin-top:10px; font-weight:bold;}
+
+
+textarea {
+    width: 100%;
+    min-height: 180px;
+    padding: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+
+</style>
+</head>
+<body>
+
+<div class="container">
+    
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <h1>Panel Administrador</h1>
+    <button id="btnCerrarSesion" style="background:#c82333; color:white; border:none; padding:8px 16px; cursor:pointer;">Cerrar Sesión</button>
+</div>
+
+<button id="btnNuevo">Registrar Nuevo Usuario</button>
+
+<form id="formulario">
+    <h3>Nuevo Usuario</h3>
+    <input type="text" id="numeroUsuario" placeholder="Número de Usuario">
+    <input type="password" id="password" placeholder="Contraseña (solo si se crea o desea cambiar)">
+    <input type="text" id="nombres" placeholder="Nombres">
+    <input type="text" id="apellidos" placeholder="Apellidos">
+    <label>Foto del Usuario</label>
+<input type="file" id="fotoInput" accept="image/*">
+<img id="previewFoto" style="width:120px; margin-top:10px; display:none;">
+    <input type="text" id="nue" placeholder="NUE">
+    <input type="text" id="fechaExpedicion" placeholder="Fecha Expedición">
+    <input type="text" id="areaRecepcion" placeholder="Área Recepción">
+    <input type="text" id="areaRegistro" placeholder="Área Registro">
+    <input type="text" id="curp" placeholder="CURP">
+    <input type="text" id="nacionalidad" placeholder="Nacionalidad">
+    <input type="text" id="fechaNacimiento" placeholder="Fecha Nacimiento">
+
+<div class="form-group">
+  <label>Párrafo 1</label>
+  <textarea id="parrafo1">
+México; OF. Delegación Federal de la Ciudad de México en virtud de lo anterior, tenga a bien solicitarle que con fundamento en el artículo 48 de la LSRPCYAP y el 16 de la fracción XII del Reglamento de la misma Ley, la Dirección a mi cargo emita el documento migratorio que acredite al presente, la residencia permanente en los Estados Unidos Mexicanos...
+  </textarea>
+</div>
+
+<div class="form-group">
+  <label>Párrafo 2</label>
+  <textarea id="parrafo2">
+La Comisión Mexicana de Ayuda a Refugiados es competente para conocer de los procedimientos de reconocimiento de la condición de refugiado, lo anterior con fundamento en los artículos 1, 11, segundo párrafo, 14 y 16 de la Constitución Política de los Estados Unidos Mexicanos; 1, 2 fracción, 26, 27 de la Ley Orgánica de la Administración Pública Federal; 4, 5, 15, fracciones I, V, XI, XXII y 54 de la Ley sobre Refugiados y Protección Complementaria (LSRPC); los artículos 35, 39, 57, 68 de la Ley de Procedimiento Administrativo, y los artículos 2, inciso C, fracción IV y último párrafo: 114, 115, 146, 147 y 150 del Reglamento de la Secretaría de Gobernación.
+  </textarea>
+</div>
+
+    <button type="button" id="guardarUsuario">Guardar Usuario</button>
+</form>
+
+<div id="statusMsg"></div>
+
+<h3>Usuarios Registrados</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Número</th>
+            <th>Nombre</th>
+            <th>NUE</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody id="tablaUsuarios"></tbody>
+</table>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, updatePassword } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+import { getDatabase, ref, set, get, update, remove } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBszJjppD1hdGWo2d1G-PZMr9hi6srDCFo",
+  authDomain: "inmx-9d529.firebaseapp.com",
+  projectId: "inmx-9d529",
+  storageBucket: "inmx-9d529.firebasestorage.app",
+  messagingSenderId: "1010164771679",
+  appId: "1:1010164771679:web:d4bfd09770b1b10267e4ea",
+  databaseURL: "https://inmx-9d529-default-rtdb.firebaseio.com"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+let modoEdicion = false;
+let usuarioEditando = null;
+let fotoBase64 = "";
+
+
+
+const fotoInput = document.getElementById("fotoInput");
+const previewFoto = document.getElementById("previewFoto");
+
+fotoInput.addEventListener("change", function () {
+    const file = this.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+        const img = new Image();
+        img.src = event.target.result;
+
+        img.onload = function () {
+            const canvas = document.createElement("canvas");
+            const maxWidth = 400;
+            const scaleSize = maxWidth / img.width;
+
+            canvas.width = maxWidth;
+            canvas.height = img.height * scaleSize;
+
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            fotoBase64 = canvas.toDataURL("image/jpeg", 0.6);
+
+            previewFoto.src = fotoBase64;
+            previewFoto.style.display = "block";
+        };
+    };
+
+    reader.readAsDataURL(file);
+});
+
+
+
+const formulario = document.getElementById("formulario");
+const botonGuardar = document.getElementById("guardarUsuario");
+const statusMsg = document.getElementById("statusMsg");
+
+document.getElementById("btnNuevo").addEventListener("click", () => {
+    formulario.style.display = "block";
+    formulario.reset?.();
+    modoEdicion = false;
+    usuarioEditando = null;
+    botonGuardar.textContent = "Guardar Usuario";
+    document.getElementById("numeroUsuario").disabled = false;
+    statusMsg.textContent = "";
+    // 🔥 LIMPIAR FOTO
+    fotoBase64 = "";
+    previewFoto.src = "";
+    previewFoto.style.display = "none";
+    document.getElementById("fotoInput").value = "";
+});
+
+botonGuardar.addEventListener("click", async () => {
+
+    const numero = document.getElementById("numeroUsuario").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const nombres = document.getElementById("nombres").value.trim();
+    const apellidos = document.getElementById("apellidos").value.trim();
+    
+    const nue = document.getElementById("nue").value.trim();
+    const fechaExp = document.getElementById("fechaExpedicion").value.trim();
+    const areaRec = document.getElementById("areaRecepcion").value.trim();
+    const areaReg = document.getElementById("areaRegistro").value.trim();
+    const curp = document.getElementById("curp").value.trim();
+    const nacionalidad = document.getElementById("nacionalidad").value.trim();
+    const fechaNac = document.getElementById("fechaNacimiento").value.trim();
+    const parrafo1 = document.getElementById("parrafo1").value.trim();
+    const parrafo2 = document.getElementById("parrafo2").value.trim();
+
+    if (!numero) { statusMsg.textContent = "Número obligatorio"; statusMsg.style.color="red"; return; }
+
+    try {
+        if (!modoEdicion) {
+            if (!password) { statusMsg.textContent = "Contraseña obligatoria"; statusMsg.style.color="red"; return; }
+
+            // Crear usuario en Auth
+            const userCred = await createUserWithEmailAndPassword(auth, numero + "@sistema.com", password);
+            const uid = userCred.user.uid;
+
+            // Guardar en DB
+            await set(ref(db, "usuarios/" + uid), {
+    uid,
+    numero,
+    nombres,
+    apellidos,
+    fotoPerfil: fotoBase64 || "",
+    parrafo1,
+    parrafo2,
+    tramite: { 
+        nue, 
+        fechaExpedicion: fechaExp, 
+        areaRecepcion: areaRec, 
+        areaRegistro: areaReg, 
+        curp, 
+        nacionalidad, 
+        fechaNacimiento: fechaNac 
+    }
+});
+
+            statusMsg.textContent = "Usuario creado correctamente";
+            statusMsg.style.color = "green";
+
+        } else {
+            // Editar usuario
+            const snapshot = await get(ref(db, "usuarios/" + usuarioEditando));
+            if(!snapshot.exists()) { statusMsg.textContent="Usuario no encontrado"; statusMsg.style.color="red"; return; }
+            const userData = snapshot.val();
+
+            // Cambiar contraseña si se ingresó
+            if(password) {
+                const userRecord = await auth.getUser(userData.uid); // Firebase Admin necesario para updatePassword desde frontend normalmente se hace con token
+                // frontend normal no puede cambiar password de otro usuario
+                // se necesita Firebase Admin SDK en backend
+            }
+
+            await update(ref(db, "usuarios/" + usuarioEditando), {
+    nombres,
+    apellidos,
+    fotoPerfil: fotoBase64 || "",
+    parrafo1,
+    parrafo2,
+    tramite: { 
+        nue, 
+        fechaExpedicion: fechaExp, 
+        areaRecepcion: areaRec, 
+        areaRegistro: areaReg, 
+        curp, 
+        nacionalidad, 
+        fechaNacimiento: fechaNac 
+    }
+});
+
+            statusMsg.textContent = "Usuario actualizado correctamente";
+            statusMsg.style.color = "green";
+            modoEdicion = false;
+            usuarioEditando = null;
+            botonGuardar.textContent = "Guardar Usuario";
+        }
+
+
+        fotoBase64 = "";
+previewFoto.src = "";
+previewFoto.style.display = "none";
+document.getElementById("fotoInput").value = "";
+
+        formulario.style.display = "none";
+        cargarUsuarios();
+
+    } catch(error) {
+        console.error(error);
+        statusMsg.textContent = "Error: " + error.message;
+        statusMsg.style.color = "red";
+    }
+});
+
+async function cargarUsuarios() {
+    const snapshot = await get(ref(db, "usuarios"));
+    const tabla = document.getElementById("tablaUsuarios");
+    tabla.innerHTML = "";
+
+    if(snapshot.exists()) {
+        const datos = snapshot.val();
+        for(let uid in datos){
+            const user = datos[uid];
+            tabla.innerHTML += `
+                <tr>
+                    <td>${user.numero}</td>
+                    <td>${user.nombres} ${user.apellidos}</td>
+                    <td>${user.tramite?.nue || ""}</td>
+                    <td>
+                        <button onclick="editarUsuario('${uid}')">Editar</button>
+                        <button onclick="eliminarUsuario('${uid}')">Eliminar</button>
+                    </td>
+                </tr>
+            `;
+        }
+    }
+}
+
+window.editarUsuario = async function(uid){
+    const snapshot = await get(ref(db, "usuarios/" + uid));
+    if(!snapshot.exists()) return;
+    const data = snapshot.val();
+
+    formulario.style.display = "block";
+    document.getElementById("numeroUsuario").value = data.numero;
+    document.getElementById("numeroUsuario").disabled = true;
+    document.getElementById("password").value = "";
+    document.getElementById("nombres").value = data.nombres || "";
+    document.getElementById("apellidos").value = data.apellidos || "";
+    fotoBase64 = data.fotoPerfil || "";
+previewFoto.src = fotoBase64;
+previewFoto.style.display = fotoBase64 ? "block" : "none";
+    document.getElementById("nue").value = data.tramite?.nue || "";
+    document.getElementById("fechaExpedicion").value = data.tramite?.fechaExpedicion || "";
+    document.getElementById("areaRecepcion").value = data.tramite?.areaRecepcion || "";
+    document.getElementById("areaRegistro").value = data.tramite?.areaRegistro || "";
+    document.getElementById("curp").value = data.tramite?.curp || "";
+    document.getElementById("nacionalidad").value = data.tramite?.nacionalidad || "";
+    document.getElementById("fechaNacimiento").value = data.tramite?.fechaNacimiento || "";
+    document.getElementById("parrafo1").value = data.parrafo1 || `México; OF. Delegación Federal de la Ciudad de México en virtud de lo anterior, tenga a bien solicitarle que con fundamento en el artículo 48 de la LSRPCYAP y el 16 de la fracción XII del Reglamento de la misma Ley, la Dirección a mi cargo emita el documento migratorio que acredite al presente, la residencia permanente en los Estados Unidos Mexicanos...`;
+
+document.getElementById("parrafo2").value = data.parrafo2 || `La Comisión Mexicana de Ayuda a Refugiados es competente para conocer de los procedimientos de reconocimiento de la condición de refugiado, lo anterior con fundamento en los artículos 1, 11, segundo párrafo, 14 y 16 de la Constitución Política de los Estados Unidos Mexicanos; 1, 2 fracción, 26, 27 de la Ley Orgánica de la Administración Pública Federal; 4, 5, 15, fracciones I, V, XI, XXII y 54 de la Ley sobre Refugiados y Protección Complementaria (LSRPC); los artículos 35, 39, 57, 68 de la Ley de Procedimiento Administrativo, y los artículos 2, inciso C, fracción IV y último párrafo: 114, 115, 146, 147 y 150 del Reglamento de la Secretaría de Gobernación.`;
+
+    modoEdicion = true;
+    usuarioEditando = uid;
+    botonGuardar.textContent = "Actualizar Usuario";
+}
+
+window.eliminarUsuario = async function(uid){
+    if(confirm("¿Seguro que quieres eliminar este usuario?")){
+        await remove(ref(db, "usuarios/" + uid));
+        statusMsg.textContent = "Usuario eliminado correctamente";
+        statusMsg.style.color = "green";
+        cargarUsuarios();
+    }
+}
+
+cargarUsuarios();
+
+
+// Botón Cerrar Sesión
+document.getElementById("btnCerrarSesion").addEventListener("click", async () => {
+    try {
+        await auth.signOut(); // Cierra sesión de Firebase
+        window.location.href = "login.html"; // Redirige al login
+    } catch (error) {
+        alert("Error al cerrar sesión: " + error.message);
+    }
+});
+
+
+
+</script>
+
+</body>
+</html>
